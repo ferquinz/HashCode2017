@@ -16,23 +16,20 @@ class Complex:
         self.mushrooms = 0
         self.tomatoes = 0
 
+
+
     def readfile(self, file):
         with file as f:
             lines = f.read().splitlines()
-            array = lines[0].split(' ')
-            lines.pop(0)
-            self.rows = int(array[0])
-            self.columns = int(array[1])
-            self.min = int(array[2])
-            self.max = int(array[3])
+            self.rows, self.columns, self.min, self.max = [int(x) for x in lines.pop(0).split(' ')]
             for row in range(self.rows):
                 self.data.append(tuple(lines[row]))
+            
             for row in range(self.rows):
-                for column in range(self.columns):
-                    if self.data[row][column] == 'T':
-                        self.tomatoes += 1
-                    else:
-                        self.mushrooms += 1
+                ntomatoes = self.data[row].count("T")
+                self.tomatoes += ntomatoes
+                self.mushrooms += self.columns - ntomatoes
+
 
     def calculateslices(self):
         max_slices = math.ceil((self.rows * self.columns) / self.max)
@@ -48,10 +45,8 @@ class Complex:
         else:
             num_mushrooms_slice = self.mushrooms / self.min
             mushrooms_per_context = math.ceil(max_slices / num_mushrooms_slice)
-            print('\nCare mushrooms, per slice: ', mushrooms_per_context)
+            print('Care mushrooms, per slice: ', mushrooms_per_context)
 
-    def __del__(self):
-        print('\n\n\nDestructor Deleting objects')
 
 
 txt = open(filename)
